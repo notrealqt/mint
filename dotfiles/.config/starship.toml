@@ -1,0 +1,74 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = "doorway"
+add_newline = true
+format = """
+$directory$git_branch$git_status$python$nodejs$rust$golang$cmd_duration
+$character"""
+
+[directory]
+style = "bold dir"
+truncation_length = 3
+truncation_symbol = "…/"
+read_only = " 󰌾"
+
+[git_branch]
+symbol = " "
+style = "subtext0"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "peach"
+format = '([$all_status$ahead_behind]($style) )'
+
+[python]
+symbol = " "
+style = "yellow"
+format = '[$symbol$version( \($virtualenv\))]($style) '
+
+[nodejs]
+symbol = " "
+style = "green"
+format = '[$symbol$version]($style) '
+
+[rust]
+symbol = " "
+style = "peach"
+format = '[$symbol$version]($style) '
+
+[golang]
+symbol = " "
+style = "sapphire"
+format = '[$symbol$version]($style) '
+
+[cmd_duration]
+min_time = 2000
+style = "overlay1"
+format = "[ $duration]($style)"
+
+[character]
+success_symbol = "[❯](bold accent)"
+error_symbol = "[❯](bold red)"
+
+
+[palettes.whale]
+text = "#f0f0f0"
+subtext0 = "#a0a0a6"
+overlay1 = "#6e6e74"
+peach = "#d1c193"
+yellow = "#d1c193"
+green = "#9db39a"
+red = "#c8817f"
+sapphire = "#8ea2bd"
+
+[palettes.doorway]
+text = "#e8dfc6"
+dir = "#4f9aa6"
+accent = "#e39236"
+subtext0 = "#b39aab"
+overlay1 = "#7c9196"
+peach = "#e39236"
+yellow = "#d78615"
+green = "#9aa556"
+red = "#cd5c45"
+sapphire = "#6c9fc0"

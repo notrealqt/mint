@@ -1,0 +1,12 @@
+{
+  "name": "doorway-theme",
+  "displayName": "Doorway",
+  "description": "Doorway rice: teal dusk + orange flowers, matched to the door wallpaper",
+  "version": "1.0.0",
+  "publisher": "notrealqt",
+  "engines": { "vscode": "^1.70.0" },
+  "categories": ["Themes"],
+  "contributes": {
+    "themes": [ { "label": "Doorway", "uiTheme": "vs-dark", "path": "./themes/doorway-color-theme.json" } ]
+  }
+}

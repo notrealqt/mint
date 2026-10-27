@@ -1,0 +1,193 @@
+#!/usr/bin/env bash
+# Doorway rice — data for the conky card. Prints conky markup.
+# Layout: label at 0, value at 84, second label at 210, second value at 290 (same as the conky config).
+# Colours are conky's color0..color9 (see ~/rice/conky/doorway.conf):
+#   color0 muted · color1 text · color2 bright · color3 teal · color4 orange
+#   color5 amber · color6 red · color7 olive · color8 mauve · color9 line
+# usage: doorway-stat <cputemp|disk|gpu|fans|link|net|speed|health|conns>
+set -u
+CACHE=${XDG_RUNTIME_DIR:-/tmp}/doorway-stat; mkdir -p "$CACHE"
+NVI_PCI=/sys/bus/pci/devices/0000:01:00.0
+WIFI=wlp3s0 ETH=enp2s0
+V='${goto 84}' L2='${goto 210}' V2='${goto 290}'
+SMALL='${font GeistMono Nerd Font:size=8.25}' R='${font}'
+
+hwmon() { for h in /sys/class/hwmon/hwmon*; do [ "$(cat "$h/name")" = "$1" ] && { echo "$h"; return; }; done; }
+lvl() { # value warn crit -> colour
+  if [ "$1" -ge "$3" ]; then echo '${color6}'; elif [ "$1" -ge "$2" ]; then echo '${color5}'; else echo '${color1}'; fi; }
+cached() { # max-age-seconds key command...
+  local age=$1 key=$2; shift 2; local f=$CACHE/$key
+  if [ ! -s "$f" ] || [ $(( $(date +%s) - $(stat -c %Y "$f") )) -ge "$age" ]; then "$@" > "$f.tmp" 2>/dev/null && mv "$f.tmp" "$f"; fi
+  cat "$f" 2>/dev/null; }
+section() { echo "\${voffset 4}\${color4}\${font GeistMono Nerd Font:semibold:size=8.25}$1\${font} \${color9}\${hr 1}"; }
+iface() { ip route show default | awk '{print $5; exit}'; }
+wired_up() { [ "$(cat /sys/class/net/$ETH/carrier 2>/dev/null)" = 1 ]; }
+
+# ── system ───────────────────────────────────────
+cputemp() { local t; t=$(( $(cat "$(hwmon k10temp)/temp1_input") / 1000 )); echo "$(lvl "$t" 75 90)${t}°"; }
+
+disk() {
+  local p t c='${color1}'
+  p=$(df --output=pcent / | tail -1 | tr -dc 0-9)
+  t=$(( $(cat "$(hwmon nvme)/temp1_input") / 1000 ))
+  [ "$p" -ge 85 ] && c='${color5}'; [ "$p" -ge 95 ] && c='${color6}'
+  printf '%s' "\${color0}ssd$V$c${p}%  $(lvl "$t" 60 70)${t}°"
+}
+
+gpu() {
+  local temp busy nt nu
+  temp=$(( $(cat "$(hwmon amdgpu)/temp1_input") / 1000 ))
+  busy=$(cat /sys/class/drm/card*/device/gpu_busy_percent 2>/dev/null | head -1); busy=${busy:-0}
+  printf '%s' "\${color0}amd$V\${color1}${busy}%  $(lvl "$temp" 75 90)${temp}°$L2\${color0}nvi$V2"
+  # never wake the NVIDIA card: only ask it when the kernel says it is already on
+  if [ "$(cat $NVI_PCI/power/runtime_status 2>/dev/null)" = active ] && command -v nvidia-smi >/dev/null; then
+    IFS=', ' read -r nt nu < <(nvidia-smi --query-gpu=temperature.gpu,utilization.gpu --format=csv,noheader,nounits)
+    echo "\${color1}${nu}%  $(lvl "$nt" 75 87)${nt}°"
+  else
+    echo '${color0}zz'
+  fi
+}
+
+fans() {
+  local h c g p
+  h=$(hwmon asus); c=$(cat "$h/fan1_input" 2>/dev/null || echo 0); g=$(cat "$h/fan2_input" 2>/dev/null || echo 0)
+  p=$(cat /sys/firmware/acpi/platform_profile 2>/dev/null || echo '?')
+  echo "\${color0}fan$V\${color1}$c · $g$L2\${color0}mode$V2\${color8}$p"
+}
+
+# ── link: wired (with LLDP switch/port) or wifi ──
+link() {
+  if wired_up; then
+    local sp dup kv sw sdesc port pdesc vlan
+    sp=$(cat /sys/class/net/$ETH/speed 2>/dev/null); dup=$(cat /sys/class/net/$ETH/duplex 2>/dev/null)
+    section "LINK · wired $ETH"
+    kv=$(lldpcli -f keyvalue show neighbors ports "$ETH" 2>/dev/null)
+    sw=$(echo "$kv" | sed -n "s/^lldp\.$ETH\.chassis\.name=//p" | head -1)
+    sdesc=$(echo "$kv" | sed -n "s/^lldp\.$ETH\.chassis\.descr=//p" | head -1 | cut -c1-18)
+    port=$(echo "$kv" | sed -n "s/^lldp\.$ETH\.port\.ifname=//p;s/^lldp\.$ETH\.port\.local=//p" | head -1)
+    pdesc=$(echo "$kv" | sed -n "s/^lldp\.$ETH\.port\.descr=//p" | head -1 | cut -c1-14)
+    vlan=$(echo "$kv" | sed -n "s/^lldp\.$ETH\.vlan\.vlan-id=//p" | head -1)
+    local sc='${color7}'; [ "${sp:-0}" -lt 1000 ] && sc='${color5}'; [ "$dup" = half ] && sc='${color6}'
+    if [ "${sp:-0}" -ge 1000 ]; then sp="$((sp / 1000)) Gb/s"; else sp="${sp:-?} Mb/s"; fi
+    echo "\${color0}speed$V$sc$sp $dup$L2\${color0}vlan$V2\${color1}${vlan:-—}"
+    if [ -n "$sw" ]; then
+      echo "\${color0}switch$V\${color1}$sw \${color0}${sdesc}"
+      echo "\${color0}port$V\${color8}${port:-?}\${color0}${pdesc:+ · \"$pdesc\"}"
+    else
+      echo "\${color0}switch$V\${color0}no LLDP from switch"
+    fi
+  else
+    local info ssid freq sig rate band ch ap sc='${color1}' sp
+    info=$(iw dev $WIFI link 2>/dev/null)
+    if ! echo "$info" | grep -q '^Connected'; then section "LINK · offline"; echo '${color6}no wifi, no cable'; return; fi
+    section "LINK · wifi $WIFI"
+    ap=$(echo "$info" | awk '/^Connected/{print $3}')
+    ssid=$(echo "$info" | sed -n 's/^\s*SSID: //p')
+    freq=$(echo "$info" | awk '/freq:/{printf "%d", $2}')
+    sig=$(echo "$info" | awk '/signal:/{print $2}')
+    rate=$(echo "$info" | awk '/rx bitrate:/{printf "%d", $3}')
+    if [ "$freq" -ge 5925 ]; then band='6 GHz'; ch=$(( (freq - 5950) / 5 ))
+    elif [ "$freq" -ge 5000 ]; then band='5 GHz'; ch=$(( (freq - 5000) / 5 ))
+    else band='2.4 GHz'; ch=$(( freq == 2484 ? 14 : (freq - 2407) / 5 )); fi
+    # signal: better than -60 good, -60..-70 ok, worse than -70 weak
+    sp=$(( sig > -60 ? 0 : (sig > -70 ? 1 : 2) ))
+    [ $sp = 0 ] && sc='${color7}'; [ $sp = 2 ] && sc='${color5}'
+    echo "\${color0}ssid$V\${color1}$ssid$L2\${color0}sig$V2$sc$sig dBm"
+    echo "\${color0}band$V\${color1}$band · ch $ch$L2\${color0}rate$V2\${color1}$rate Mb/s"
+    echo "\${color0}ap$V\${color0}$ap"
+  fi
+}
+
+# ── addressing ───────────────────────────────────
+_wan() { curl -fsS -m 4 https://ipinfo.io/json | python3 -I -c '
+import json,sys; d=json.load(sys.stdin)
+org=" ".join(d.get("org","").split()[1:2])   # "AS7552 Viettel Group" -> "Viettel"
+print(d.get("ip","?"), " ", d.get("country",""), (" · "+org) if org else "")'; }
+_dnsms() { resolvectl query --cache=no google.com 2>/dev/null | sed -n 's/.*in \([0-9.]*\)ms.*/\1/p' | cut -d. -f1; }
+
+net() {
+  local i lan gw dns ms wan vpn='${color0}○ off' fw x
+  i=$(iface)
+  lan=$(ip -4 -o addr show "$i" 2>/dev/null | awk '{print $4}' | head -1)
+  gw=$(ip route show default | awk '{print $3; exit}')
+  dns=$(resolvectl status "$i" 2>/dev/null | sed -n 's/.*Current DNS Server: //p' | head -1)
+  ms=$(cached 30 dnsms _dnsms)
+  wan=$(cached 600 wan _wan)
+  for x in $(ls /sys/class/net); do
+    case $x in wg*|tun*|tap*|tailscale*|proton*|nordlynx|ppp*)
+      vpn="\${color7}● $x $(ip -4 -o addr show "$x" | awk '{print $4}' | cut -d/ -f1 | head -1)"; break;; esac
+  done
+  if grep -q '^ENABLED=yes' /etc/ufw/ufw.conf 2>/dev/null; then fw='${color7}● ufw on'; else fw='${color6}○ ufw off'; fi
+  local mc='${color0}'; [ -n "$ms" ] && [ "$ms" -ge 100 ] && mc='${color5}'
+  echo "\${color0}lan$V\${color1}${lan:-—}"
+  echo "\${color0}gw$V\${color1}${gw:-—}"
+  echo "\${color0}dns$V\${color1}${dns:-—}  $mc${ms:+· $ms ms}"
+  echo "\${color0}wan$V\${color1}${wan:-\${color6\}offline}"
+  echo "\${color0}vpn$V$vpn$L2\${color0}fw$V2$fw"
+}
+
+speed() { # rates from byte counters between calls (on whichever interface has the default route)
+  local i rx tx now f prx ptx pt dt
+  i=$(iface); [ -z "$i" ] && { echo '${color0}↓ —'; return; }
+  rx=$(cat /sys/class/net/$i/statistics/rx_bytes); tx=$(cat /sys/class/net/$i/statistics/tx_bytes); now=$(date +%s%N)
+  f=$CACHE/speed-$i
+  if [ -f "$f" ]; then read -r prx ptx pt < "$f"; else prx=$rx ptx=$tx pt=$((now - 1000000000)); fi
+  echo "$rx $tx $now" > "$f"
+  dt=$(( (now - pt) / 1000000 )); [ "$dt" -le 0 ] && dt=1
+  h() { numfmt --to=iec --suffix=B/s --format='%.1f' "$(( $1 * 1000 / dt ))"; }
+  echo "\${font GeistMono Nerd Font:medium:size=9.75}\${color3}↓ $(h $((rx - prx)))$L2\${color4}↑ $(h $((tx - ptx)))\${font}"
+}
+
+# ── health: latency, loss, jitter ────────────────
+health() {
+  local gw out name host c rest
+  gw=$(ip route show default | awk '{print $3; exit}')
+  echo "$SMALL\${color0}\${goto 220}     ms\${goto 286}  loss\${goto 346}jitter$R"
+  # 5 pings each, 200 ms apart, all hosts in parallel
+  out=$(fping -C5 -q -p200 -t800 ${gw:+$gw} 1.1.1.1 google.com 2>&1)
+  for name in gw 1.1.1.1 google; do
+    case $name in gw) host=$gw;; google) host=google.com;; *) host=$name;; esac
+    [ -z "$host" ] && continue
+    rest=$(echo "$out" | awk -v h="$host" '$1==h{ $1=""; $2=""; print }')
+    echo "$rest" | awk -v n="$name" '
+      { ok=0; sum=0; j=0; prev=-1
+        for (i=1;i<=NF;i++) if ($i!="-") { ok++; sum+=$i; if (prev>=0) j+=($i>prev?$i-prev:prev-$i); prev=$i }
+        loss = NF ? int((NF-ok)*100/NF) : 100
+        ms = ok ? sum/ok : -1; jit = ok>1 ? j/(ok-1) : 0
+        c = "${color7}"
+        if (ms<0 || loss>=20 || ms>=150) c="${color6}"; else if (loss>0 || ms>=80 || jit>=20) c="${color5}"
+        lc = loss ? "${color5}" : "${color1}"; jc = jit>=20 ? "${color5}" : "${color1}"
+        printf "%s●${color1}  %s${goto 220}%s%7s${goto 286}%s%6s${goto 346}%s%6s\n", c, n, c,
+          (ms<0 ? "×" : sprintf("%d", ms+0.5)), lc, loss "%", jc, (ok>1 ? sprintf("%.1f", jit) : "—") }'
+  done
+}
+
+# ── connections ──────────────────────────────────
+conns() {
+  local est lis sshin top exposed
+  est=$(ss -Htn state established | wc -l); lis=$(ss -Htln | wc -l)
+  sshin=$(ss -Htn state established '( sport = :22 )' | awk '{print $4}' | sed 's/:[0-9]*$//' | sort -u)
+  echo "\${color0}est$V\${color1}$est$L2\${color0}listen$V2\${color1}$lis"
+  if [ -n "$sshin" ]; then
+    echo "\${color0}ssh-in$V\${color6}$(echo "$sshin" | wc -l)  from $(echo "$sshin" | head -1)"
+  else
+    echo "\${color0}ssh-in$V\${color1}0"
+  fi
+  # busiest apps by open connections (only your own processes are visible without root)
+  top=$(ss -Htnp state established 2>/dev/null | sed -n 's/.*users:(("\([^"]*\)".*/\1/p' | sort | uniq -c | sort -rn | head -2 | awk '{print $2" "$1}')
+  [ -n "$top" ] && echo "\${color0}top$V\${color8}$(echo "$top" | paste -sd'|' | sed 's/|/  ·  /')"
+  # anything listening on all interfaces is reachable from the network
+  exposed=$(ss -Htln | awk '{print $4}' | grep -E '^(0\.0\.0\.0|\*|\[::\]):' | sed 's/.*://' | sort -un | head -4 | sed 's/^/:/' | tr '\n' ' ')
+  if [ -n "$exposed" ]; then echo "\${color0}exposed$V\${color5}$exposed"; else echo "\${color0}exposed$V—"; fi
+}
+
+# ── top 4 apps by RAM (all processes of an app added together) ──
+mem() {
+  ps -eo comm=,rss= | awk '{ m[$1] += $2 } END { for (a in m) print m[a], a }' | sort -rn | head -4 |
+    while read -r kb app; do
+      local c='${color1}'; [ "$kb" -ge 2097152 ] && c='${color5}'   # over 2 GiB: amber
+      printf '%s%s${alignr}%s%s\n' '${color8}' "${app:0:22}" "$c" "$(numfmt --from-unit=1024 --to=iec --format='%.1f' "$kb")"
+    done
+}
+
+"${1:-gpu}"

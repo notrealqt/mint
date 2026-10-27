@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Doorway rice — show / hide / restart the conky monitoring card.
+# usage: doorway-card [toggle|start|stop|restart]   (Super+M = toggle)
+CONF=$HOME/rice/conky/doorway.conf
+# framebuffer scale: 2 while fractional scaling is on (X draws at 2x), else 1
+scale() {
+  gdbus call --session --dest org.cinnamon.Muffin.DisplayConfig --object-path /org/cinnamon/Muffin/DisplayConfig \
+    --method org.cinnamon.Muffin.DisplayConfig.GetCurrentState 2>/dev/null |
+    grep -q "'x11-fractional-scaling': <true>" && grep -q 'x11-randr-fractional-scaling' \
+    <(gsettings get org.cinnamon.muffin experimental-features) && echo 2 || echo 1
+}
+# xinerama number of the primary screen (the laptop, where the panel lives)
+panel_head() {
+  gdbus call --session --dest org.Cinnamon --object-path /org/Cinnamon --method org.Cinnamon.Eval \
+    'global.display.logical_index_to_xinerama_index(Main.layoutManager.primaryIndex)' 2>/dev/null |
+    grep -o "'[0-9]*'" | tr -d "'" | grep . || echo 0
+}
+running() { pgrep -f "conky -c $CONF" >/dev/null; }
+start() { running || DOORWAY_S=$(scale) DOORWAY_HEAD=$(panel_head) setsid conky -c "$CONF" >/dev/null 2>&1 & }
+stop() { # wait for conky to really exit, otherwise a following start thinks it's still running
+  pkill -f "conky -c $CONF"
+  for _ in $(seq 30); do running || return 0; sleep 0.1; done
+  pkill -9 -f "conky -c $CONF"; }
+case ${1:-toggle} in
+  start) start ;;
+  stop) stop ;;
+  restart) stop; start ;;
+  toggle) if running; then stop; else start; fi ;;
+esac

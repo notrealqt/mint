@@ -1,0 +1,20 @@
+[Hotkey]
+# Super+Space flips English <-> Vietnamese (same key Cinnamon used before)
+EnumerateWithTriggerKeys=True
+EnumerateSkipFirst=False
+
+[Hotkey/TriggerKeys]
+0=Super+space
+
+[Hotkey/AltTriggerKeys]
+# empty: tapping Shift alone does NOT switch language
+
+[Hotkey/EnumerateForwardKeys]
+
+[Hotkey/EnumerateBackwardKeys]
+
+[Behavior]
+# one English/Vietnamese state for every window
+ShareInputState=All
+ShowInputMethodInformation=True
+showInputMethodInformationWhenFocusIn=False

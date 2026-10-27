@@ -1,0 +1,4 @@
+# mockup animations are big and can be regenerated with the make_*.py scripts
+preview/*.gif
+__pycache__/
+*.pyc

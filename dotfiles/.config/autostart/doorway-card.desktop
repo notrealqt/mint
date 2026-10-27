@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Doorway monitoring card
+Comment=Conky system + network card (Super+M toggles)
+Exec=sh -c "sleep 5 && $HOME/rice/bin/doorway-card start"
+X-GNOME-Autostart-enabled=true
+NoDisplay=false

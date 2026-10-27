@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Fcitx 5 (Vietnamese typing)
+Comment=Doorway rice: Unikey Telex, Super+Space switches EN/VI
+Exec=fcitx5 -d
+X-GNOME-Autostart-enabled=true
+NoDisplay=false

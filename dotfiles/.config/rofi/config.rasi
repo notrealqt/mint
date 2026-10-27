@@ -1,0 +1,20 @@
+/* Doorway rice — rofi settings. Theme: doorway-grid.rasi */
+configuration {
+    modi:                "drun,run";
+    show-icons:          true;
+    icon-theme:          "Papirus-Dark";
+    drun-display-format: "{name}";
+    display-drun:        "";
+    display-run:         "";
+    terminal:            "kitty";
+    matching:            "fuzzy";
+    sort:                true;
+    sorting-method:      "fzf";
+    hover-select:        true;
+    me-select-entry:     "";
+    me-accept-entry:     "MousePrimary";
+    kb-cancel:           "Escape,Super+a";
+    /* screens render at 2x (Xft.dpi 192 with fractional scaling) — without this rofi draws at 96 dpi = half size */
+    dpi:                 192;
+}
+@theme "doorway-grid"

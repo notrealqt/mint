@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Doorway alerts
+Comment=Notify on CPU over 90°C, battery under 15%, internet down
+Exec=sh -c "sleep 10 && exec $HOME/rice/bin/doorway-alerts"
+X-GNOME-Autostart-enabled=true
+NoDisplay=false

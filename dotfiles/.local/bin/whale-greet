@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Doorway rice — kitty greeting: a humpback drawn in a grid of small squares swims (looping)
+# beside fastfetch. The animation is ~/.config/kitty/whale-grid.gif, built by ~/rice/whale/make_whale.py
+# for 20x44 px cells and a 36x13-cell area. Narrow/short windows just get fastfetch without a logo.
+gif=$HOME/.config/kitty/whale-grid.gif
+if [[ "$TERM" == xterm-kitty && -f "$gif" && $(tput cols) -ge 68 && $(tput lines) -ge 16 ]] \
+   && command -v kitten >/dev/null; then
+  printf '\e[H\e[2J'                       # start at the top so the image sits next to the text
+  fastfetch -c "$HOME/.config/fastfetch/whale-grid.jsonc"
+  kitten icat --place 36x13@0x0 --transfer-mode=file --stdin=no "$gif" 2>/dev/null
+  tput cup 13 0                            # icat parks the cursor at the top; put it under the block
+else
+  fastfetch --logo none
+fi

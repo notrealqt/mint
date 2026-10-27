@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Panel on laptop screen
+Comment=Keeps the Cinnamon panel on the built-in display when monitors change
+Exec=sh -c "sleep 3 && exec $HOME/rice/bin/panel-on-laptop"
+X-GNOME-Autostart-enabled=true
+NoDisplay=false

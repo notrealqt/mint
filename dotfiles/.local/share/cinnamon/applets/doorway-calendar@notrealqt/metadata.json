@@ -1,0 +1,7 @@
+{
+ "uuid": "doorway-calendar@notrealqt",
+ "name": "Doorway Calendar",
+ "description": "Cinnamon calendar with Chinese lunar dates in each day and a lunar summary below",
+ "icon": "gnome-calendar",
+ "max-instances": -1
+}

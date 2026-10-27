@@ -1,0 +1,6 @@
+/* Doorway rice — new tab / home page background */
+@-moz-document url("about:newtab"), url("about:home"), url("about:blank") {
+  html, body { background-color: #0b1d22 !important; }
+  body { --newtab-background-color: #0b1d22 !important; --newtab-text-primary-color: #e8dfc6 !important;
+         --newtab-element-hover-color: #1d3b42 !important; --newtab-primary-action-background: #e39236 !important; }
+}

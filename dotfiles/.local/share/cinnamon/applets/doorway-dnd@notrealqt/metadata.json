@@ -1,0 +1,6 @@
+{
+  "uuid": "doorway-dnd@notrealqt",
+  "name": "Doorway do not disturb",
+  "description": "Doorway rice: bell that turns notification pop-ups on/off (org.cinnamon.desktop.notifications display-notifications).",
+  "max-instances": 1
+}

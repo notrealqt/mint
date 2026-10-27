@@ -1,0 +1,104 @@
+/* Doorway rice — shell additions on top of the recoloured Mint-Y-Dark-Aqua cinnamon.css
+   (appended by ~/rice/build-shell.sh). Look agreed in ~/rice/preview/shell.png. */
+
+/* panel: translucent deep teal, thin line under it */
+.panel-top, .panel-bottom, .panel-left, .panel-right {
+  color: #e8dfc6;
+  background-color: rgba(11, 29, 34, 0.90); }
+.panel-top    { box-shadow: 0 1px #2c4a50; }
+.panel-bottom { box-shadow: 0 -1px #2c4a50; }
+.panel-left   { box-shadow: 1px 0 #2c4a50; }
+.panel-right  { box-shadow: -1px 0 #2c4a50; }
+
+/* open window in the window list: orange underline */
+.window-list-item-box:active, .window-list-item-box:checked,
+.window-list-item-box:focus, .window-list-item-box:running,
+.grouped-window-list-item-box:active, .grouped-window-list-item-box:checked {
+  border-color: #e39236; }
+.window-list-item-box:hover, .window-list-item-box:groupFocus,
+.window-list-item-box:active, .window-list-item-box:checked, .window-list-item-box:focus {
+  background-color: rgba(232, 223, 198, 0.10);
+  border-radius: 6px 6px 0 0; }
+
+/* popups (menu, calendar, tray menus): rounded all round, border, soft shadow */
+.menu {
+  background-color: #12292f;
+  border: 1px solid #2c4a50;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55); }
+.menu-top, .menu-bottom, .menu-left, .menu-right { border-radius: 10px; }
+.popup-sub-menu { background-color: #0f2329; border-radius: 6px; }
+.popup-menu-item:active { color: #f2e5b8; background-color: #1d3b42; }
+
+/* app menu */
+#menu-search-entry {
+  background-color: #0b1d22;
+  border: 1px solid rgba(227, 146, 54, 0.75);
+  border-radius: 8px; }
+#menu-search-entry:focus { border-color: #e39236; }
+.menu-category-button-selected {
+  color: #f2e5b8;
+  background-color: #1d3b42;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-left: 3px solid #e39236;
+  padding-left: 5px; }
+.menu-category-button:hover { background-color: #1d3b42; }
+.menu-application-button-selected {
+  color: #f2e5b8;
+  background-color: #2e7682;
+  border-radius: 6px; }
+
+/* calendar: today = orange square, hover = deep teal */
+.calendar-today, .calendar-today:selected {
+  color: #0b1d22;
+  background-color: #e39236;
+  font-weight: bold;
+  border-radius: 8px; }
+.calendar-day-base:hover { color: #f2e5b8; background-color: #2e7682; border-radius: 8px; }
+.calendar-not-today:selected { background-color: rgba(79, 154, 166, 0.35); border-radius: 8px; }
+.calendar-today-day-label { color: #f2e5b8; }
+.calendar-today-date-label { color: #7c9196; }
+
+/* ── panel B: floating islands (~/rice/preview/panel-b2.png) ──
+   the bar itself is clear; the left / centre / right zones become rounded pills */
+.panel-top, .panel-bottom, .panel-left, .panel-right {
+  background-color: transparent;
+  box-shadow: none; }
+.panel-top .panelLeft, .panel-top .panelCenter, .panel-top .panelRight,
+.panel-bottom .panelLeft, .panel-bottom .panelCenter, .panel-bottom .panelRight {
+  background-color: rgba(11, 29, 34, 0.88);
+  border: 1px solid #2c4a50;
+  border-radius: 14px;
+  margin: 0 6px;          /* full panel height: workspace + window-list applets force 40px */
+  padding: 0 8px; }
+.panel-top .panelLeft:dnd, .panel-top .panelCenter:dnd, .panel-top .panelRight:dnd {
+  background-gradient-direction: none;
+  background-color: rgba(29, 59, 66, 0.95); }
+.applet-box { border-radius: 10px; }
+.applet-box:hover, .applet-box:checked { background-color: rgba(232, 223, 198, 0.10); }
+
+/* workspaces 1 2 3 4: plain numbers; the current one is orange with an orange underline,
+   matching the open-app marks in the window list (the applet forces full panel height,
+   so a filled chip would be a full-height block) */
+.workspace-button {
+  border: 0 solid transparent;
+  border-top-width: 3px;
+  border-bottom-width: 3px;
+  width: 1.6em;
+  margin: 0 1px;
+  color: #7c9196;
+  background-color: transparent; }
+.workspace-button:hover { color: #e8dfc6; background-color: rgba(232, 223, 198, 0.08); }
+.workspace-button:outlined, .workspace-button:outlined:hover {
+  color: #e39236;
+  font-weight: bold;
+  border-bottom-color: #e39236;
+  background-color: transparent; }
+.workspace-button:shaded { color: #e8dfc6; background-color: transparent; }
+
+/* thin divider inside the right island */
+.applet-separator { padding: 0 6px; }
+.applet-separator-line { width: 1px; background-color: #2c4a50; margin: 8px 0; }
+
+/* the window list keeps its orange underline; no box around the active app */
+.grouped-window-list-item-box:active, .grouped-window-list-item-box:checked { background-color: transparent; }

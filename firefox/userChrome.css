@@ -1,0 +1,59 @@
+/* Doorway rice — Firefox toolbar, tabs, URL bar and menus in Doorway colours.
+   Source of truth: ~/rice/firefox/userChrome.css (copied into the profile). Restart Firefox after edits. */
+:root {
+  --dw-base: #0b1d22;  --dw-mantle: #091619; --dw-surface: #12292f; --dw-overlay: #1d3b42;
+  --dw-line: #2c4a50;  --dw-muted: #7c9196;  --dw-text: #e8dfc6;    --dw-bright: #f2e5b8;
+  --dw-teal: #4f9aa6;  --dw-sel: #2e7682;    --dw-orange: #e39236;
+
+  --lwt-accent-color: var(--dw-mantle) !important;
+  --lwt-text-color: var(--dw-text) !important;
+  --toolbox-bgcolor: var(--dw-mantle) !important;
+  --toolbox-textcolor: var(--dw-text) !important;
+  --toolbar-bgcolor: var(--dw-base) !important;
+  --toolbar-color: var(--dw-text) !important;
+  --toolbar-field-background-color: var(--dw-surface) !important;
+  --toolbar-field-color: var(--dw-text) !important;
+  --toolbar-field-focus-background-color: var(--dw-surface) !important;
+  --toolbar-field-focus-color: var(--dw-bright) !important;
+  --toolbar-field-focus-border-color: var(--dw-orange) !important;
+  --toolbar-field-border-color: var(--dw-line) !important;
+  --tab-selected-bgcolor: var(--dw-base) !important;
+  --tab-selected-textcolor: var(--dw-bright) !important;
+  --tab-hover-background-color: rgba(232, 223, 198, 0.08) !important;
+  --chrome-content-separator-color: var(--dw-line) !important;
+  --arrowpanel-background: var(--dw-surface) !important;
+  --arrowpanel-color: var(--dw-text) !important;
+  --arrowpanel-border-color: var(--dw-line) !important;
+  --panel-separator-color: var(--dw-line) !important;
+  --focus-outline-color: var(--dw-orange) !important;
+  --button-primary-bgcolor: var(--dw-orange) !important;
+  --button-primary-hover-bgcolor: #eda552 !important;
+  --button-primary-color: var(--dw-base) !important;
+  --color-accent-primary: var(--dw-orange) !important;
+  --urlbarView-highlight-background: var(--dw-overlay) !important;
+  --urlbarView-highlight-color: var(--dw-bright) !important;
+  --sidebar-background-color: var(--dw-mantle) !important;
+  --sidebar-text-color: var(--dw-text) !important;
+  --newtab-background-color: var(--dw-base) !important;
+}
+
+#navigator-toolbox { background-color: var(--dw-mantle) !important; border-bottom: 1px solid var(--dw-line) !important; }
+#TabsToolbar, #titlebar { background-color: var(--dw-mantle) !important; }
+#nav-bar, #PersonalToolbar { background-color: var(--dw-base) !important; }
+
+/* selected tab: orange line on top, like the panel's open-window mark */
+.tabbrowser-tab[selected] .tab-background {
+  background: var(--dw-base) !important;
+  box-shadow: inset 0 2px 0 var(--dw-orange) !important;
+  outline: 1px solid var(--dw-line) !important;
+}
+.tabbrowser-tab:not([selected]) .tab-label { color: var(--dw-muted) !important; }
+
+/* URL bar */
+#urlbar-background { border: 1px solid var(--dw-line) !important; border-radius: 10px !important; }
+#urlbar[focused] #urlbar-background { border-color: var(--dw-orange) !important; }
+#urlbar-input::selection { background-color: var(--dw-sel) !important; color: var(--dw-bright) !important; }
+
+/* menus and panels */
+menupopup, panel { --panel-border-radius: 10px !important; }
+menupopup menuitem:hover, menupopup menu:hover { background-color: var(--dw-overlay) !important; }

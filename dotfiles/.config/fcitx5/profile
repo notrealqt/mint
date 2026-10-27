@@ -1,0 +1,16 @@
+[Groups/0]
+# Doorway rice: English keyboard + Vietnamese (Unikey, Telex). Super+Space switches.
+Name=Default
+Default Layout=us
+DefaultIM=unikey
+
+[Groups/0/Items/0]
+Name=keyboard-us
+Layout=
+
+[Groups/0/Items/1]
+Name=unikey
+Layout=
+
+[GroupOrder]
+0=Default

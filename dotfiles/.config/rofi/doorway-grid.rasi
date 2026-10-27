@@ -1,0 +1,92 @@
+/* Doorway rice — rofi app launcher, grid style (option B in ~/rice/preview/launcher.png).
+   Opened with Super+A → ~/rice/bin/doorway-launcher. Sizes in em (1em ≈ 14.7 logical px) so they follow Xft.dpi like the font does. */
+
+* {
+    base:    #0b1d22;
+    surface: #12292fF0;
+    overlay: #1d3b42;
+    line:    #2c4a50;
+    muted:   #7c9196;
+    text:    #e8dfc6;
+    bright:  #f2e5b8;
+    orange:  #e39236;
+
+    background-color: transparent;
+    text-color:       @text;
+    font:             "Geist 11";
+}
+
+window {
+    transparency:     "real";
+    location:         center;
+    anchor:           center;
+    width:            61.35em;
+    background-color: @surface;
+    border:           1px;
+    border-color:     @line;
+    border-radius:    1.50em;
+}
+
+mainbox {
+    padding:  1.91em 1.91em 1.36em;
+    spacing:  1.64em;
+    children: [ "inputbar", "listview" ];
+}
+
+inputbar {
+    margin:           0 14.31em;
+    padding:          0.82em 1.36em;
+    spacing:          0.68em;
+    background-color: @base;
+    border:           1px;
+    border-color:     @orange;
+    border-radius:    1.77em;
+    children:         [ "prompt", "entry" ];
+}
+prompt { text-color: @orange; }
+entry {
+    placeholder:       "Search apps…";
+    placeholder-color: @muted;
+    text-color:        @bright;
+    cursor:            text;
+}
+
+listview {
+    columns:      6;
+    lines:        2;
+    spacing:      0.95em;
+    fixed-height: true;
+    cycle:        true;
+    dynamic:      false;
+    scrollbar:    false;
+    flow:         horizontal;
+}
+
+element {
+    orientation:   vertical;
+    padding:       0.95em 0.41em 0.68em;
+    spacing:       0.68em;
+    border:        1px;
+    border-color:  transparent;
+    border-radius: 1.09em;
+    cursor:        pointer;
+}
+element normal.normal, element alternate.normal { background-color: transparent; }
+element selected.normal {
+    background-color: @overlay;
+    border-color:     @orange;
+}
+element-icon {
+    size:   4.36em;
+    cursor: inherit;
+    horizontal-align: 0.5;
+}
+element-text {
+    horizontal-align: 0.5;
+    vertical-align:   0.5;
+    text-color:       inherit;
+    cursor:           inherit;
+}
+element selected.normal element-text { text-color: @bright; }
+
+message, textbox { text-color: @muted; }

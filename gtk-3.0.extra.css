@@ -1,0 +1,57 @@
+
+/* ── Doorway rice: lock screen (cinnamon-screensaver), option B in ~/rice/preview/lock-v2.png ──
+   Appended to gtk-3.0/gtk.css by ~/rice/build-gtk.sh. Because the theme now contains .csstage,
+   cinnamon-screensaver uses these rules instead of its own fallback css.
+   Clock/date fonts are set in gsettings (org.cinnamon.desktop.screensaver font-time / font-date). */
+
+/* dim the wallpaper towards the deep teal: teal stage behind, wallpaper partly see-through */
+.csstage { background-color: #0b1d22; }
+.csstage stack > image { opacity: 0.62; }
+
+.csstage .clock {
+  color: #f2e5b8;
+  text-shadow: 0 2px 12px alpha(black, 0.35); }
+
+.csstage .unlockbox {
+  color: #e8dfc6;
+  font-size: 20px;
+  text-shadow: none; }
+
+.csstage .passwordentry {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 24px;
+  border: 1px solid #4f9aa6;
+  background-color: alpha(#0b1d22, 0.85);
+  background-image: none;
+  color: #f2e5b8;
+  caret-color: #e39236;
+  box-shadow: none; }
+.csstage .passwordentry:focus { border-color: #e39236; }
+.csstage .passwordentry progress {
+  border-radius: 24px; border: none; background-color: alpha(#e39236, 0.25); background-image: none; }
+
+.csstage .auth-message, .csstage .caps-message { color: #e39236; }
+
+.csstage .toppanel {
+  border: none;
+  background-image: none;
+  background-color: transparent;
+  color: #e8dfc6; }
+.csstage .audiopanel, .csstage .infopanel {
+  border: 1px solid #2c4a50;
+  border-radius: 12px;
+  background-color: alpha(#0b1d22, 0.6); }
+.csstage .notificationwidget, .csstage .powerwidget { color: #e8dfc6; font-weight: normal; }
+
+.csstage .transparentbutton {
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  color: #e8dfc6; }
+.csstage .transparentbutton:hover { background-color: alpha(#e8dfc6, 0.1); }
+.csstage .transparentbutton:focus { border-color: #e39236; }
+.csstage .transparentbutton:active { background-color: alpha(#4f9aa6, 0.3); }
+.csstage .framedimage { border-radius: 50%; border: 2px solid #e39236; }

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Doorway rice — keep the Cinnamon panel on the laptop screen (the primary display, eDP).
+# panels-enabled stores X/xinerama monitor numbers, while Cinnamon works with its own
+# logical numbers, and both orders can change when the ViewSonic is plugged in or out.
+# So ask Cinnamon which logical monitor is primary, convert that to the xinerama number,
+# and write it into every panel definition. Repeats on every monitor change (and moves the
+# conky card along with it). Started from autostart.
+DEST=org.cinnamon.Muffin.DisplayConfig OBJ=/org/cinnamon/Muffin/DisplayConfig
+
+cin() { gdbus call --session --dest org.Cinnamon --object-path /org/Cinnamon --method org.Cinnamon.Eval "$1" 2>/dev/null; }
+
+apply() {
+  local x cur new
+  x=$(cin 'global.display.logical_index_to_xinerama_index(Main.layoutManager.primaryIndex)' | grep -o "'[0-9]*'" | tr -d "'")
+  [ -z "$x" ] && return
+  cur=$(gsettings get org.cinnamon panels-enabled)
+  # entries look like 'id:monitor:position' — rewrite the monitor part
+  new=$(echo "$cur" | sed -E "s/'([0-9]+):[0-9]+:/'\1:$x:/g")
+  [ "$new" != "$cur" ] && gsettings set org.cinnamon panels-enabled "$new"
+}
+
+apply
+[ "${1:-}" = once ] && exit 0
+gdbus monitor --session --dest $DEST --object-path $OBJ |
+  while read -r line; do
+    case $line in *MonitorsChanged*) sleep 2; apply
+      # the monitoring card follows the panel
+      pgrep -f 'conky -c .*doorway.conf' >/dev/null && "$HOME/rice/bin/doorway-card" restart ;; esac
+  done

@@ -1,0 +1,6 @@
+{
+  "uuid": "doorway-tray@notrealqt",
+  "name": "Doorway tray filter",
+  "description": "Doorway rice: hides tray icons the panel doesn't need (apps keep running).",
+  "cinnamon-version": ["6.0", "6.2", "6.4", "6.6"]
+}

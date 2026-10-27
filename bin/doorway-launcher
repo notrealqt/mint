@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Doorway rice — app launcher (rofi grid, theme ~/.config/rofi/doorway-grid.rasi). Bound to Super+A.
+# Opens on the screen with the mouse pointer; pressing Super+A again (or Esc) closes it.
+pkill -x rofi && exit 0
+exec rofi -show drun -monitor -1
