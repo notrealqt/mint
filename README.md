@@ -14,17 +14,17 @@ Warm, dreamy, grainy. Dark base taken from the deep teal of the sky.
 | 4  | GTK theme (apps)             | ✅ done  | ~/.themes/Doorway, built by ~/rice/build-gtk.sh (recolours Mint-Y-Dark-Aqua) |
 | 5  | Window borders               | ✅ done  | Doorway (GTK-drawn title bars, Mint-Y-Orange buttons) |
 | 6  | Desktop shell (panel/menu)   | ✅ done  | ~/.themes/Doorway/cinnamon, built by ~/rice/build-shell.sh (recolours Mint-Y-Dark-Aqua + ~/rice/cinnamon.extra.css): translucent teal panel, rounded popups, orange accents, orange "today" |
-| 7  | Icon theme                   | ✅ done  | Papirus-Dark, pale-orange folders (option B) — ~/rice/build-icons.sh re-points folder links in ~/.local/share/icons/Papirus |
-| 8  | Cursor                       | ✅ done  | Bibata-Modern-Ice (white) — option C in ~/rice/preview/cursor.png |
-| 9  | Panel layout                 | ✅ done  | option B islands (panel-b2.png), 40px, on the laptop (panel-on-laptop). Left: orange menu · workspaces 1-4 · window list. Centre: lunar calendar "Tue 27 Oct  17:52". Right: night light · keep awake (coffee cup, orange = on; icons in ~/.local/share/icons/hicolor/scalable/status/inhibit-*) · do-not-disturb bell (doorway-dnd@notrealqt, click = toggle, orange when silenced) · notification list (shows when there are some) │ bluetooth · drives · wifi · sound · battery. Mini stats dropped (card shows them). Tray filter: extension doorway-tray@notrealqt hides Update Manager, mintreport, process-monitor, NVIDIA Prime icons (apps still run). Old layout: ~/rice/panel-applets.before-B.txt |
+| 7  | Icon theme                   | ✅ done  | Papirus-Dark, pale-orange folders — ~/rice/build-icons.sh re-points folder links in ~/.local/share/icons/Papirus |
+| 8  | Cursor                       | ✅ done  | Bibata-Modern-Ice (white) |
+| 9  | Panel layout                 | ✅ done  | floating islands, 40px, on the laptop (panel-on-laptop). Left: orange menu · workspaces 1-4 · window list. Centre: lunar calendar "Tue 27 Oct  17:52". Right: night light · keep awake (coffee cup, orange = on; icons in ~/.local/share/icons/hicolor/scalable/status/inhibit-*) · do-not-disturb bell (doorway-dnd@notrealqt, click = toggle, orange when silenced) · notification list (shows when there are some) │ bluetooth · drives · wifi · sound · battery. Mini stats dropped (card shows them). Tray filter: extension doorway-tray@notrealqt hides Update Manager, mintreport, process-monitor, NVIDIA Prime icons (apps still run). Old layout: ~/rice/panel-applets.before-B.txt |
 | 10 | Login / lock screen          | ✅ done* | lock: .csstage css in ~/rice/gtk-3.0.extra.css, GeistMono clock, fixed centre, dimmed teal · login (slick-greeter): ~/rice/apply-login.sh — *needs `sudo bash ~/rice/apply-login.sh` once (re-run after rebuilding the GTK theme) |
-| 11 | Terminal (kitty)             | ✅ done  | ~/.config/kitty/doorway.conf (whale.conf kept, not included) |
+| 11 | Terminal (kitty)             | ✅ done  | ~/.config/kitty/doorway.conf · opens 70x20 · no auto-fastfetch (`whale` shows the greeting) |
 | 12 | Prompt (starship)            | ✅ done  | palette "doorway" in ~/.config/starship.toml |
 | 13 | Fetch (fastfetch)            | ✅ done  | on demand only — type `whale` (no auto-run on new kitty). Greeting: humpback in a grid of small squares (contribution-graph style) swimming beside fastfetch — wake, spout, bubbles, light rays, fish. GIF ~/.config/kitty/whale-grid.gif built by ~/rice/whale/make_whale.py (20x44 px cells, 36x13 area); layout ~/.config/fastfetch/whale-grid.jsonc; played by ~/.local/bin/whale-greet (windows ≥68x16, else fastfetch without logo) |
 | 14 | Terminal apps (btop, …)      | ✅ done  | ~/.config/btop/themes/doorway.theme |
-| 15 | App launcher                 | ✅ done  | rofi grid (option B, launcher.png): ~/.config/rofi/config.rasi (dpi 192 — screens render at 2x) + doorway-grid.rasi, Super+A → ~/rice/bin/doorway-launcher |
-| 16 | Desktop widgets              | ✅ done  | network-admin conky card (layout = ~/rice/preview/card-v3.png): system · link (wifi or wired + LLDP switch/port) · network (lan/gw/dns/wan/vpn/fw) · health (ms/loss/jitter via fping) · connections · memory (top 4 apps by RAM). Follows the panel: laptop top-right just under the panel (DOORWAY_HEAD from doorway-card; panel-on-laptop restarts it on monitor change). Super+M toggles. Alerts running. Needs lldpd iw ufw fping (installed). |
-| 17 | Editor (VS Code)             | ✅ done  | Doorway colour theme (~/rice/vscode-doorway → doorway-theme.vsix, installed), GeistMono 14 / terminal 13, ligatures, smooth caret, custom title bar. Old settings: ~/.config/Code/User/settings.json.pre-doorway |
+| 15 | App launcher                 | ✅ done  | rofi grid: ~/.config/rofi/config.rasi (dpi 192 — screens render at 2x) + doorway-grid.rasi, Super+A → ~/rice/bin/doorway-launcher |
+| 16 | Desktop widgets              | ✅ done  | network-admin conky card: system · link (wifi or wired + LLDP switch/port) · network (lan/gw/dns/wan/vpn/fw) · health (ms/loss/jitter via fping) · connections · memory (top 4 apps by RAM). Follows the panel: laptop top-right just under the panel (DOORWAY_HEAD from doorway-card; panel-on-laptop restarts it on monitor change). Super+M toggles. Alerts running. Needs lldpd iw ufw fping (installed). |
+| 17 | Editor (VS Code)             | ✅ done  | Doorway colour theme (~/rice/vscode-doorway → doorway-theme.vsix, installed), GeistMono 14 / terminal 13, ligatures, smooth caret, custom title bar |
 | 18 | Browser (Firefox)            | ✅ done  | userChrome.css / userContent.css + user.js in profile ym2kcaxo.default-release (copies in ~/rice/firefox): teal toolbars, orange line on the active tab, orange focused URL bar, dark new tab |
 | 19 | Window behaviour             | ✅ done  | Super+1-4 go to workspace, Super+Shift+1-4 move window there (window-list Super+number launching turned off) · Super+←→↑↓ tile · Super+F maximise · Super+H minimise · Super+Q close · new windows centred · dialogs attached · animations fast |
 | 20 | Dotfiles / backup            | ✅ done  | ~/rice is a git repo. `bash ~/rice/collect.sh` copies all configs into ~/rice/dotfiles + dumps Cinnamon settings (~/rice/dconf) + commits. Fresh install: packages.txt → restore.sh → apply-login.sh |
@@ -81,11 +81,12 @@ cyan `#4f9aa6` / `#74b6c0` · white `#e8dfc6` / `#f2e5b8`
   alerts (~/rice/bin/doorway-alerts: CPU ≥90°C 30s, battery <15%, internet down), both autostart
 - 2026-10-27 — lunar calendar applet; panel kept on laptop screen
 - 2026-10-27 — icons: Papirus-Dark + pale-orange folders; Doorway Cinnamon shell theme
-  (mockups ~/rice/preview/icons.png, shell.png). Note: Cinnamon crashed once in its screenshot
+  Note: Cinnamon crashed once in its screenshot
   code (17:43, unrelated to the theme) → fallback mate-panel appeared; fixed by restarting Cinnamon
 - 2026-10-27 — cursor Bibata-Modern-Ice; lock screen themed; rofi grid launcher (Super+A; Super+Space
   stays the US/VN keyboard switch); card moved under the panel on the laptop.
 - 2026-10-27 — fcitx5 Unikey Telex replaces ibus/fcitx4 + xkb vn; keyboard applet → fcitx tray "en/vi"; Flameshot Ctrl+Shift+S
+- 2026-10-27 — cleanup: old whale rice archive, .pre-rice backups, mockups (still in git history), unused cursor copy removed
 - 2026-10-27 — window behaviour (workspace/tiling keys), VS Code + Firefox themes, login screen script, git backup (collect.sh / restore.sh)
 - 2026-10-27 — panel B islands with workspaces, keyboard, night light, keep awake, DND; tray icons filtered
 
@@ -117,7 +118,7 @@ cyan `#4f9aa6` / `#74b6c0` · white `#e8dfc6` / `#f2e5b8`
 | Menu button icon | ~/rice/assets/doorway-menu.svg |
 | Panel stays on laptop | ~/rice/bin/panel-on-laptop (watches monitor changes, moves panel to eDP's index) |
 
-## Plan (agreed look: ~/rice/preview/doorway-mockup-v2.png · panel-states.png · lockscreen.png)
+## Plan (original build order — all done; mockups are in the git history)
 
 Hardware notes: Ryzen (k10temp Tctl), AMD Vega iGPU (amdgpu edge), NVIDIA RTX 3050 dGPU
 (only read via nvidia-smi when already awake — don't wake it), NVMe temp, BAT0, ASUS fan hwmon, wifi wlp3s0.
