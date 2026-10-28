@@ -90,6 +90,7 @@ cyan `#4f9aa6` / `#74b6c0` · white `#e8dfc6` / `#f2e5b8`
 - 2026-10-27 — window behaviour (workspace/tiling keys), VS Code + Firefox themes, login screen script, git backup (collect.sh / restore.sh)
 - 2026-10-27 — panel B islands with workspaces, keyboard, night light, keep awake, DND; tray icons filtered
 - 2026-10-28 — conky card: vpn and fw on separate lines (a long VPN name + IP overlapped "fw")
+- 2026-10-28 — conky card moved left (gap_x 16 → 37): its right edge spilled 10px onto the ViewSonic
 
 ## Files
 
