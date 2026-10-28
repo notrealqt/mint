@@ -4,10 +4,11 @@
   --dw-base: #0b1d22;  --dw-mantle: #091619; --dw-surface: #12292f; --dw-overlay: #1d3b42;
   --dw-line: #2c4a50;  --dw-muted: #7c9196;  --dw-text: #e8dfc6;    --dw-bright: #f2e5b8;
   --dw-teal: #4f9aa6;  --dw-sel: #2e7682;    --dw-orange: #e39236;
+  --dw-head: #10252b;  /* window title-bar colour = the panel when it merges (README #9) */
 
-  --lwt-accent-color: var(--dw-mantle) !important;
+  --lwt-accent-color: var(--dw-head) !important;
   --lwt-text-color: var(--dw-text) !important;
-  --toolbox-bgcolor: var(--dw-mantle) !important;
+  --toolbox-bgcolor: var(--dw-head) !important;
   --toolbox-textcolor: var(--dw-text) !important;
   --toolbar-bgcolor: var(--dw-base) !important;
   --toolbar-color: var(--dw-text) !important;
@@ -37,8 +38,8 @@
   --newtab-background-color: var(--dw-base) !important;
 }
 
-#navigator-toolbox { background-color: var(--dw-mantle) !important; border-bottom: 1px solid var(--dw-line) !important; }
-#TabsToolbar, #titlebar { background-color: var(--dw-mantle) !important; }
+#navigator-toolbox { background-color: var(--dw-head) !important; border-bottom: 1px solid var(--dw-line) !important; }
+#TabsToolbar, #titlebar { background-color: var(--dw-head) !important; }
 #nav-bar, #PersonalToolbar { background-color: var(--dw-base) !important; }
 
 /* selected tab: orange line on top, like the panel's open-window mark */

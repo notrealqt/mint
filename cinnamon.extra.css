@@ -71,6 +71,15 @@
   border-radius: 14px;
   margin: 0 6px;          /* full panel height: workspace + window-list applets force 40px */
   padding: 0 8px; }
+/* a maximised / tiled window reaches the panel (extension doorway-solid@notrealqt adds the class):
+   strip = window title-bar colour, islands melt into it → panel + title bar / tabs = one header
+   (~/rice/preview/panel-max-b-merge.png) */
+.panel-top, .panel-top .panelLeft, .panel-top .panelCenter, .panel-top .panelRight {
+  transition-duration: 150ms; }
+.panel-top.doorway-solid { background-color: #10252b; }
+.panel-top.doorway-solid .panelLeft, .panel-top.doorway-solid .panelCenter, .panel-top.doorway-solid .panelRight {
+  background-color: transparent;
+  border-color: transparent; }
 .panel-top .panelLeft:dnd, .panel-top .panelCenter:dnd, .panel-top .panelRight:dnd {
   background-gradient-direction: none;
   background-color: rgba(29, 59, 66, 0.95); }

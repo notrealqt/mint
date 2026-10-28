@@ -16,7 +16,7 @@ Warm, dreamy, grainy. Dark base taken from the deep teal of the sky.
 | 6  | Desktop shell (panel/menu)   | ✅ done  | ~/.themes/Doorway/cinnamon, built by ~/rice/build-shell.sh (recolours Mint-Y-Dark-Aqua + ~/rice/cinnamon.extra.css): translucent teal panel, rounded popups, orange accents, orange "today" |
 | 7  | Icon theme                   | ✅ done  | Papirus-Dark, pale-orange folders — ~/rice/build-icons.sh re-points folder links in ~/.local/share/icons/Papirus |
 | 8  | Cursor                       | ✅ done  | Bibata-Modern-Ice (white) |
-| 9  | Panel layout                 | ✅ done  | floating islands, 40px, on the laptop (panel-on-laptop). Left: orange menu · workspaces 1-4 · window list. Centre: lunar calendar "Tue 27 Oct  17:52". Right: night light · keep awake (coffee cup, orange = on; icons in ~/.local/share/icons/hicolor/scalable/status/inhibit-*) · do-not-disturb bell (doorway-dnd@notrealqt, click = toggle, orange when silenced) · notification list (shows when there are some) │ bluetooth · drives · wifi · sound · battery. Mini stats dropped (card shows them). Tray filter: extension doorway-tray@notrealqt hides Update Manager, mintreport, process-monitor, NVIDIA Prime icons (apps still run). Old layout: ~/rice/panel-applets.before-B.txt |
+| 9  | Panel layout                 | ✅ done  | floating islands, 40px, on the laptop (panel-on-laptop). Left: orange menu · workspaces 1-4 · window list. Centre: lunar calendar "Tue 27 Oct  17:52". Right: night light · keep awake (coffee cup, orange = on; icons in ~/.local/share/icons/hicolor/scalable/status/inhibit-*) · do-not-disturb bell (doorway-dnd@notrealqt, click = toggle, orange when silenced) · notification list (shows when there are some) │ bluetooth · drives · wifi · sound · battery. Mini stats dropped (card shows them). Tray filter: extension doorway-tray@notrealqt hides Update Manager, mintreport, process-monitor, NVIDIA Prime icons (apps still run). Old layout: ~/rice/panel-applets.before-B.txt · **Merges when maximised:** a maximised or tiled (top/left/right/quarter) window on the laptop's current workspace turns the strip solid #10252b (= window title-bar colour) and the islands melt into it, so panel + title bar / Firefox tabs read as one header; floating windows never count (extension doorway-solid@notrealqt + `.doorway-solid` rules in cinnamon.extra.css; mocks ~/rice/preview/panel-max-*.png, panel-case-*.png) |
 | 10 | Login / lock screen          | ✅ done* | lock: .csstage css in ~/rice/gtk-3.0.extra.css, GeistMono clock, fixed centre, dimmed teal · login (slick-greeter): ~/rice/apply-login.sh — *needs `sudo bash ~/rice/apply-login.sh` once (re-run after rebuilding the GTK theme) |
 | 11 | Terminal (kitty)             | ✅ done  | ~/.config/kitty/doorway.conf · opens 70x20 · no auto-fastfetch (`whale` shows the greeting) |
 | 12 | Prompt (starship)            | ✅ done  | palette "doorway" in ~/.config/starship.toml |
@@ -25,7 +25,7 @@ Warm, dreamy, grainy. Dark base taken from the deep teal of the sky.
 | 15 | App launcher                 | ✅ done  | rofi grid: ~/.config/rofi/config.rasi (dpi 192 — screens render at 2x) + doorway-grid.rasi, Super+A → ~/rice/bin/doorway-launcher |
 | 16 | Desktop widgets              | ✅ done  | network-admin conky card: system · link (wifi or wired + LLDP switch/port) · network (lan/gw/dns/wan/vpn/fw) · health (ms/loss/jitter via fping) · connections · memory (top 4 apps by RAM). Follows the panel: laptop top-right just under the panel (DOORWAY_HEAD from doorway-card; panel-on-laptop restarts it on monitor change). Super+M toggles. Alerts running. Needs lldpd iw ufw fping (installed). |
 | 17 | Editor (VS Code)             | ✅ done  | Doorway colour theme (~/rice/vscode-doorway → doorway-theme.vsix, installed), GeistMono 14 / terminal 13, ligatures, smooth caret, custom title bar |
-| 18 | Browser (Firefox)            | ✅ done  | userChrome.css / userContent.css + user.js in profile ym2kcaxo.default-release (copies in ~/rice/firefox): teal toolbars, orange line on the active tab, orange focused URL bar, dark new tab |
+| 18 | Browser (Firefox)            | ✅ done  | userChrome.css / userContent.css + user.js in profile ym2kcaxo.default-release (copies in ~/rice/firefox): teal toolbars, tab strip #10252b with no separate title bar (matches the merged panel), orange line on the active tab, orange focused URL bar, dark new tab |
 | 19 | Window behaviour             | ✅ done  | Super+1-4 go to workspace, Super+Shift+1-4 move window there (window-list Super+number launching turned off) · Super+←→↑↓ tile · Super+F maximise · Super+H minimise · Super+Q close · new windows centred · dialogs attached · animations fast |
 | 20 | Dotfiles / backup            | ✅ done  | ~/rice is a git repo. `bash ~/rice/collect.sh` copies all configs into ~/rice/dotfiles + dumps Cinnamon settings (~/rice/dconf) + commits. Fresh install: packages.txt → restore.sh → apply-login.sh |
 
@@ -90,6 +90,7 @@ cyan `#4f9aa6` / `#74b6c0` · white `#e8dfc6` / `#f2e5b8`
 - 2026-10-27 — window behaviour (workspace/tiling keys), VS Code + Firefox themes, login screen script, git backup (collect.sh / restore.sh)
 - 2026-10-27 — panel B islands with workspaces, keyboard, night light, keep awake, DND; tray icons filtered
 - 2026-10-28 — conky card: vpn and fw on separate lines (a long VPN name + IP overlapped "fw")
+- 2026-10-28 — panel merges with maximised/tiled windows (doorway-solid extension); Firefox tab strip → #10252b and its separate title bar turned off (browser.tabs.inTitlebar)
 - 2026-10-28 — conky card moved left (gap_x 16 → 27): its right edge spilled 10px onto the ViewSonic; now lines up with the right edge of the panel's right island (x 3060)
 
 ## Files
@@ -117,6 +118,7 @@ cyan `#4f9aa6` / `#74b6c0` · white `#e8dfc6` / `#f2e5b8`
 | Login screen | ~/rice/apply-login.sh (sudo) |
 | Backup / restore | ~/rice/collect.sh · ~/rice/restore.sh · ~/rice/packages.txt · ~/rice/dconf/ · ~/rice/dotfiles/ |
 | Tray icon filter | ~/.local/share/cinnamon/extensions/doorway-tray@notrealqt |
+| Solid panel when maximised | ~/.local/share/cinnamon/extensions/doorway-solid@notrealqt |
 | Menu button icon | ~/rice/assets/doorway-menu.svg |
 | Panel stays on laptop | ~/rice/bin/panel-on-laptop (watches monitor changes, moves panel to eDP's index) |
 

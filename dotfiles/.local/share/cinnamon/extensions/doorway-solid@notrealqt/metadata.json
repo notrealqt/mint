@@ -1,0 +1,6 @@
+{
+  "uuid": "doorway-solid@notrealqt",
+  "name": "Doorway solid panel",
+  "description": "Doorway rice: the floating-island panel turns into one solid bar while a maximised or tiled window touches it.",
+  "cinnamon-version": ["6.0", "6.2", "6.4", "6.6"]
+}
