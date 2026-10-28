@@ -123,7 +123,8 @@ net() {
   echo "\${color0}gw$V\${color1}${gw:-—}"
   echo "\${color0}dns$V\${color1}${dns:-—}  $mc${ms:+· $ms ms}"
   echo "\${color0}wan$V\${color1}${wan:-\${color6\}offline}"
-  echo "\${color0}vpn$V$vpn$L2\${color0}fw$V2$fw"
+  echo "\${color0}vpn$V$vpn"
+  echo "\${color0}fw$V$fw"
 }
 
 speed() { # rates from byte counters between calls (on whichever interface has the default route)

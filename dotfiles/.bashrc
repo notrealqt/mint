@@ -124,3 +124,4 @@ alias whale='whale-greet'
 alias ls='ls --color=auto --group-directories-first'
 alias ll='ls -lh'
 alias la='ls -lAh'
+. "$HOME/.cargo/env"

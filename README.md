@@ -133,3 +133,4 @@ Build order:
 
 Suggested extras (not yet chosen): fan RPM / ASUS profile · VPN / public-IP indicator ·
 alerts (temp, battery, gateway down) · hotkey to toggle card · lock screen · VS Code theme
+- 2026-10-28 — conky card: vpn and fw on separate lines (a long VPN name + IP overlapped "fw")
