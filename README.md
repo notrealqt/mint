@@ -89,6 +89,7 @@ cyan `#4f9aa6` / `#74b6c0` · white `#e8dfc6` / `#f2e5b8`
 - 2026-10-27 — cleanup: old whale rice archive, .pre-rice backups, mockups (still in git history), unused cursor copy removed
 - 2026-10-27 — window behaviour (workspace/tiling keys), VS Code + Firefox themes, login screen script, git backup (collect.sh / restore.sh)
 - 2026-10-27 — panel B islands with workspaces, keyboard, night light, keep awake, DND; tray icons filtered
+- 2026-10-28 — conky card: vpn and fw on separate lines (a long VPN name + IP overlapped "fw")
 
 ## Files
 
@@ -133,4 +134,3 @@ Build order:
 
 Suggested extras (not yet chosen): fan RPM / ASUS profile · VPN / public-IP indicator ·
 alerts (temp, battery, gateway down) · hotkey to toggle card · lock screen · VS Code theme
-- 2026-10-28 — conky card: vpn and fw on separate lines (a long VPN name + IP overlapped "fw")
