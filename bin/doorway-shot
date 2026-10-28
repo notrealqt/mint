@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Doorway rice — snip a screenshot (Ctrl+Shift+S). Drag an area, then Enter / Ctrl+C copies it
-# (also saved to ~/Pictures/Screenshots), Ctrl+S saves only, Esc cancels.
+# Doorway rice — snip a screenshot (Ctrl+Shift+S), Windows-style: drag an area and on release
+# it's copied to the clipboard and saved to ~/Pictures/Screenshots — no confirm step. Esc cancels.
 # Uses Flameshot instead of Cinnamon's own screenshot code, which crashed Cinnamon once.
-exec flameshot gui
+mkdir -p "$HOME/Pictures/Screenshots"
+exec flameshot gui --accept-on-select --clipboard   # saveAfterCopy in flameshot.ini also saves it

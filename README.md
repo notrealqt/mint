@@ -29,7 +29,7 @@ Warm, dreamy, grainy. Dark base taken from the deep teal of the sky.
 | 19 | Window behaviour             | ✅ done  | Super+1-4 go to workspace, Super+Shift+1-4 move window there (window-list Super+number launching turned off) · Super+←→↑↓ tile · Super+F maximise · Super+H minimise · Super+Q close · new windows centred · dialogs attached · animations fast |
 | 20 | Dotfiles / backup            | ✅ done  | ~/rice is a git repo. `bash ~/rice/collect.sh` copies all configs into ~/rice/dotfiles + dumps Cinnamon settings (~/rice/dconf) + commits. Fresh install: packages.txt → restore.sh → apply-login.sh |
 
-Other tweaks done: Vietnamese typing = fcitx5 + Unikey Telex (Super+Space EN/VI, ~/.config/fcitx5, Doorway theme ~/.local/share/fcitx5/themes/Doorway; old fcitx4 purged; GLFW_IM_MODULE=ibus in ~/.xsessionrc for kitty) · screenshots = Flameshot on Ctrl+Shift+S (~/rice/bin/doorway-shot → ~/Pictures/Screenshots) · kitty opens 70x20 · dark mode on, desktop icons on (laptop screen), auto-arrange off,
+Other tweaks done: Vietnamese typing = fcitx5 + Unikey Telex (Super+Space EN/VI, ~/.config/fcitx5, Doorway theme ~/.local/share/fcitx5/themes/Doorway; old fcitx4 purged; GLFW_IM_MODULE=ibus in ~/.xsessionrc for kitty) · screenshots = Flameshot on Ctrl+Shift+S, copies to clipboard on release (~/rice/bin/doorway-shot → also saved to ~/Pictures/Screenshots) · kitty opens 70x20 · dark mode on, desktop icons on (laptop screen), auto-arrange off,
 icon grid spacing 75%.
 
 ## 1 · Palette
@@ -92,6 +92,7 @@ cyan `#4f9aa6` / `#74b6c0` · white `#e8dfc6` / `#f2e5b8`
 - 2026-10-28 — conky card: vpn and fw on separate lines (a long VPN name + IP overlapped "fw")
 - 2026-10-28 — panel merges with maximised/tiled windows (doorway-solid extension); Firefox tab strip → #10252b and its separate title bar turned off (browser.tabs.inTitlebar)
 - 2026-10-28 — conky card moved left (gap_x 16 → 27): its right edge spilled 10px onto the ViewSonic; now lines up with the right edge of the panel's right island (x 3060)
+- 2026-10-28 — screenshots work like Windows Win+Shift+S: drag an area and it's copied to the clipboard (and saved) as soon as you let go — no Enter/confirm step
 
 ## Files
 
