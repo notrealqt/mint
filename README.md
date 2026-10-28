@@ -95,6 +95,7 @@ cyan `#4f9aa6` / `#74b6c0` · white `#e8dfc6` / `#f2e5b8`
 - 2026-10-28 — 1px gap under the panel (maximised/tiled windows) and between tiled windows — doorway-gaps extension
 - 2026-10-28 — gaps widened to 4px; tiled windows get 3px rounded corners (shader mask)
 - 2026-10-28 — all windows rounded (floating 8px, matching the title-bar curve; outline + shadow follow the curve). Cinnamon drops the bottom rows of an effect on a window hanging above the screen top, so full-height tiles on the external monitor fall back to a square clip (gap kept)
+- 2026-10-28 — doorway-gaps crash fix: the per-frame mask code called meta_window_get_work_area_current_monitor, which segfaults Cinnamon for a closing window (2 crashes, 09:15 + 09:22). Monitor lookups now happen outside painting and closing windows drop the effect. Also fixed: tiled windows going invisible (static per-class shader → per-window shader again) and tile changes without a size change not updating
 - 2026-10-28 — Chrome removed: profile + cache moved to the Trash; package needs `sudo apt purge google-chrome-stable`
 - 2026-10-28 — screenshots work like Windows Win+Shift+S: drag an area and it's copied to the clipboard (and saved) as soon as you let go — no Enter/confirm step
 

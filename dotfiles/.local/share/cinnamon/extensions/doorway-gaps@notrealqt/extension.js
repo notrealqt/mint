@@ -55,7 +55,7 @@ void main() {
 }`;
 // a whole number would reach GL as an int uniform; nudge it so GJS sends a double
 const f = n => n + 0.0001;
-let struts = [], panelIds = [], winIds = new Map(), sigs = [], pending = 0, settle = 0, rebuildId = 0;
+let closing = new Set(), struts = [], panelIds = [], winIds = new Map(), sigs = [], pending = 0, settle = 0, rebuildId = 0;
 
 // ---- panel gap ----
 function clearStruts() {
@@ -91,20 +91,17 @@ function allWindows() {
 }
 
 // A ShaderEffect that refreshes its uniforms right before every paint, so the mask never lags
-// behind a tile / snap / resize. Its shader is static, so it is compiled once per class instead of
-// once per window. A GType can only be registered once per Cinnamon session, so the class is kept
-// on `global` under a name tied to the shader text (an edited shader gets a fresh class) and calls
-// back into whatever `sync` this module currently provides.
+// behind a tile / snap / resize. (A static per-class shader left some windows blank, so each
+// effect sets its own source.) A GType can only be registered once per Cinnamon session, so the
+// class is kept on `global` under a name tied to the shader text and calls back into whatever
+// `sync` this module currently provides.
 function roundEffectClass() {
     let hash = 0;
     for (let i = 0; i < SHADER.length; i++) hash = (hash * 31 + SHADER.charCodeAt(i)) >>> 0;
-    let name = 'DoorwayRoundEffect' + hash.toString(16);
+    let name = 'DoorwayRoundEffectI' + hash.toString(16);
     global._doorwayRound = global._doorwayRound || {};
     if (!global._doorwayRound[name])
         global._doorwayRound[name] = GObject.registerClass({ GTypeName: name }, class extends Clutter.ShaderEffect {
-            vfunc_get_static_shader_source() {
-                return SHADER;
-            }
             vfunc_paint_target(ctx) {
                 if (this._sync) this._sync(this);
                 super.vfunc_paint_target(ctx);
@@ -113,17 +110,22 @@ function roundEffectClass() {
     return global._doorwayRound[name];
 }
 
+// Runs inside Cinnamon's paint: only plain geometry getters here. Anything that looks up the
+// window's monitor segfaults Cinnamon when the window is closing (it has no monitor any more),
+// so the work area is looked up in clip() and cached on the effect.
 function sync(effect) {
-    let actor = effect.get_actor(), win = actor && actor.meta_window;
-    if (!win) return;
+    let actor = effect.get_actor(), win = actor && actor.meta_window, area = effect._area;
+    if (!win || !area || effect._dead) {
+        effect.set_uniform_value('on', f(0));
+        return;
+    }
     // while a tile / maximise animation scales the window, just show it unmasked
     let [sx, sy] = actor.get_scale();
     if (Math.abs(sx - 1) > 0.001 || Math.abs(sy - 1) > 0.001) {
         effect.set_uniform_value('on', f(0));
         return;
     }
-    let fr = win.get_frame_rect(), b = win.get_buffer_rect();
-    let area = win.get_work_area_current_monitor(), tiled = !!win.tile_mode;
+    let fr = win.get_frame_rect(), b = win.get_buffer_rect(), tiled = effect._tiled;
     let left = tiled && fr.x > area.x ? GAP : 0, top = tiled && fr.y > area.y ? GAP : 0;
     // frame box on the stage, following the actor if it is being moved by an animation
     let [ax, ay] = actor.get_transformed_position();
@@ -152,28 +154,45 @@ function shaderSafe(win) {
     return !lostX && !lostY;
 }
 
-function squareClip(win, actor) {
+function squareClip(win, actor, area) {
     let fr = win.get_frame_rect(), b = win.get_buffer_rect();
-    let area = win.get_work_area_current_monitor();
     let left = fr.x > area.x ? GAP : 0, top = fr.y > area.y ? GAP : 0;
     actor.set_clip(fr.x - b.x + left, fr.y - b.y + top, fr.width - left, fr.height - top);
+}
+
+function unround(actor) {
+    let effect = actor.get_effect(EFFECT);
+    if (effect) {
+        effect._dead = true;
+        actor.remove_effect(effect);
+    }
+    if (actor.has_clip) actor.remove_clip();
 }
 
 function clip(win) {
     let actor = win.get_compositor_private();
     if (!actor) return;
+    if (closing.has(win) || win.get_monitor() < 0) {
+        unround(actor);
+        return;
+    }
+    let area = win.get_work_area_current_monitor();
+    area = { x: area.x, y: area.y };
     let effect = actor.get_effect(EFFECT);
     let wanted = ROUNDED.includes(win.get_window_type()) && !win.is_fullscreen() &&
                  win.get_maximized() !== Meta.MaximizeFlags.BOTH;
     let safe = wanted && shaderSafe(win);
     if (!safe && effect) actor.remove_effect(effect);
-    if (wanted && !safe && win.tile_mode) squareClip(win, actor);
+    if (wanted && !safe && win.tile_mode) squareClip(win, actor, area);
     else if (actor.has_clip) actor.remove_clip();
     if (!safe) return;
     if (!effect) {
-        effect = new (roundEffectClass())();
+        effect = new (roundEffectClass())({ shader_type: Clutter.ShaderType.FRAGMENT_SHADER });
+        effect.set_shader_source(SHADER);
         actor.add_effect_with_name(EFFECT, effect);
     }
+    effect._area = area;
+    effect._tiled = !!win.tile_mode;
     effect._sync = sync;
     effect.queue_repaint();
 }
@@ -195,8 +214,18 @@ function queueClip() {
 
 function watch(win) {
     if (winIds.has(win)) return;
-    winIds.set(win, ['size-changed', 'position-changed'].map(s => win.connect(s, queueClip)));
-    win.connect('unmanaged', () => winIds.delete(win));
+    let ids = ['size-changed', 'position-changed'].map(s => win.connect(s, queueClip));
+    // drop the effect the moment a window starts closing (its close animation still paints)
+    ids.push(win.connect('unmanaging', () => {
+        closing.add(win);
+        let a = win.get_compositor_private();
+        if (a) unround(a);
+    }));
+    ids.push(win.connect('unmanaged', () => {
+        closing.delete(win);
+        winIds.delete(win);
+    }));
+    winIds.set(win, ids);
 }
 
 function init(metadata) {}
@@ -221,12 +250,12 @@ function disable() {
     sigs = [];
     winIds.forEach((ids, win) => ids.forEach(id => win.disconnect(id)));
     winIds.clear();
+    closing.clear();
     [pending, settle, rebuildId].forEach(id => { if (id) GLib.source_remove(id); });
     pending = settle = rebuildId = 0;
     clearStruts();
     allWindows().forEach(w => {
         let a = w.get_compositor_private();
-        if (a && a.get_effect(EFFECT)) a.remove_effect_by_name(EFFECT);
-        if (a && a.has_clip) a.remove_clip();
+        if (a) unround(a);
     });
 }
