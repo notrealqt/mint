@@ -93,7 +93,9 @@ cyan `#4f9aa6` / `#74b6c0` · white `#e8dfc6` / `#f2e5b8`
 - 2026-10-28 — panel merges with maximised/tiled windows (doorway-solid extension); Firefox tab strip → #10252b and its separate title bar turned off (browser.tabs.inTitlebar)
 - 2026-10-28 — conky card moved left (gap_x 16 → 27): its right edge spilled 10px onto the ViewSonic; now lines up with the right edge of the panel's right island (x 3060)
 - 2026-10-28 — 1px gap under the panel (maximised/tiled windows) and between tiled windows — doorway-gaps extension
-- 2026-10-28 — gaps widened to 4px; tiled windows get 3px rounded corners, floating windows 8px (all apps, incl. Firefox); full-height tiles on the external monitor stay square (Cinnamon bug, see extension) (shader mask)
+- 2026-10-28 — gaps widened to 4px; tiled windows get 3px rounded corners (shader mask)
+- 2026-10-28 — all windows rounded (floating 8px, matching the title-bar curve; outline + shadow follow the curve). Cinnamon drops the bottom rows of an effect on a window hanging above the screen top, so full-height tiles on the external monitor fall back to a square clip (gap kept)
+- 2026-10-28 — Chrome removed: profile + cache moved to the Trash; package needs `sudo apt purge google-chrome-stable`
 - 2026-10-28 — screenshots work like Windows Win+Shift+S: drag an area and it's copied to the clipboard (and saved) as soon as you let go — no Enter/confirm step
 
 ## Files
