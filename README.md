@@ -26,7 +26,7 @@ Warm, dreamy, grainy. Dark base taken from the deep teal of the sky.
 | 16 | Desktop widgets              | ✅ done  | network-admin conky card: system · link (wifi or wired + LLDP switch/port) · network (lan/gw/dns/wan/vpn/fw) · health (ms/loss/jitter via fping) · connections · memory (top 4 apps by RAM). Follows the panel: laptop top-right just under the panel (DOORWAY_HEAD from doorway-card; panel-on-laptop restarts it on monitor change). Super+M toggles. Alerts running. Needs lldpd iw ufw fping (installed). |
 | 17 | Editor (VS Code)             | ✅ done  | Doorway colour theme (~/rice/vscode-doorway → doorway-theme.vsix, installed), GeistMono 14 / terminal 13, ligatures, smooth caret, custom title bar |
 | 18 | Browser (Firefox)            | ✅ done  | userChrome.css / userContent.css + user.js in profile ym2kcaxo.default-release (copies in ~/rice/firefox): teal toolbars, tab strip #10252b with no separate title bar (matches the merged panel), orange line on the active tab, orange focused URL bar, dark new tab |
-| 19 | Window behaviour             | ✅ done  | Super+1-4 go to workspace, Super+Shift+1-4 move window there (window-list Super+number launching turned off) · Super+←→↑↓ tile · Super+F maximise · Super+H minimise · Super+Q close · 1px gaps: under the panel for maximised/tiled windows and between tiles (extension doorway-gaps@notrealqt; mock ~/rice/preview/gaps-zoom.png) · new windows centred · dialogs attached · animations fast |
+| 19 | Window behaviour             | ✅ done  | Super+1-4 go to workspace, Super+Shift+1-4 move window there (window-list Super+number launching turned off) · Super+←→↑↓ tile · Super+F maximise · Super+H minimise · Super+Q close · 4px gaps under the panel (maximised/tiled windows) and between tiles, tiled windows get 3px rounded corners (extension doorway-gaps@notrealqt; mock ~/rice/preview/gaps-zoom.png) · new windows centred · dialogs attached · animations fast |
 | 20 | Dotfiles / backup            | ✅ done  | ~/rice is a git repo. `bash ~/rice/collect.sh` copies all configs into ~/rice/dotfiles + dumps Cinnamon settings (~/rice/dconf) + commits. Fresh install: packages.txt → restore.sh → apply-login.sh |
 
 Other tweaks done: Vietnamese typing = fcitx5 + Unikey Telex (Super+Space EN/VI, ~/.config/fcitx5, Doorway theme ~/.local/share/fcitx5/themes/Doorway; old fcitx4 purged; GLFW_IM_MODULE=ibus in ~/.xsessionrc for kitty) · screenshots = Flameshot on Ctrl+Shift+S, copies to clipboard on release (~/rice/bin/doorway-shot → also saved to ~/Pictures/Screenshots) · kitty opens 70x20 · dark mode on, desktop icons on (laptop screen), auto-arrange off,
@@ -93,6 +93,7 @@ cyan `#4f9aa6` / `#74b6c0` · white `#e8dfc6` / `#f2e5b8`
 - 2026-10-28 — panel merges with maximised/tiled windows (doorway-solid extension); Firefox tab strip → #10252b and its separate title bar turned off (browser.tabs.inTitlebar)
 - 2026-10-28 — conky card moved left (gap_x 16 → 27): its right edge spilled 10px onto the ViewSonic; now lines up with the right edge of the panel's right island (x 3060)
 - 2026-10-28 — 1px gap under the panel (maximised/tiled windows) and between tiled windows — doorway-gaps extension
+- 2026-10-28 — gaps widened to 4px; tiled windows get 3px rounded corners (shader mask)
 - 2026-10-28 — screenshots work like Windows Win+Shift+S: drag an area and it's copied to the clipboard (and saved) as soon as you let go — no Enter/confirm step
 
 ## Files
@@ -120,7 +121,7 @@ cyan `#4f9aa6` / `#74b6c0` · white `#e8dfc6` / `#f2e5b8`
 | Login screen | ~/rice/apply-login.sh (sudo) |
 | Backup / restore | ~/rice/collect.sh · ~/rice/restore.sh · ~/rice/packages.txt · ~/rice/dconf/ · ~/rice/dotfiles/ |
 | Tray icon filter | ~/.local/share/cinnamon/extensions/doorway-tray@notrealqt |
-| Window gaps | ~/.local/share/cinnamon/extensions/doorway-gaps@notrealqt (GAP = 2 stage px = 1px) |
+| Window gaps | ~/.local/share/cinnamon/extensions/doorway-gaps@notrealqt (GAP 8 / RADIUS 6 stage px = 4px / 3px; tiles are masked by a shader, not resized) |
 | Solid panel when maximised | ~/.local/share/cinnamon/extensions/doorway-solid@notrealqt |
 | Menu button icon | ~/rice/assets/doorway-menu.svg |
 | Panel stays on laptop | ~/rice/bin/panel-on-laptop (watches monitor changes, moves panel to eDP's index) |

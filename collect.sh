@@ -22,6 +22,7 @@ FILES=(
   .local/share/cinnamon/applets/doorway-dnd@notrealqt
   .local/share/cinnamon/extensions/doorway-tray@notrealqt
   .local/share/cinnamon/extensions/doorway-solid@notrealqt
+  .local/share/cinnamon/extensions/doorway-gaps@notrealqt
   .local/share/fcitx5/themes/Doorway
   .local/share/icons/hicolor/scalable/status
   .icons/default/index.theme
